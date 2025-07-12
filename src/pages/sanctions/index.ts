@@ -1,0 +1,1 @@
+export * from './supervision-list/SanctionListPage';
