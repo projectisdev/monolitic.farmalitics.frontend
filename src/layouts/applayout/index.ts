@@ -8,3 +8,4 @@ export * from './header';
 export * from './main';
 export * from './mega-menu';
 export * from './sidebar';
+export * from './MinimalLayout';

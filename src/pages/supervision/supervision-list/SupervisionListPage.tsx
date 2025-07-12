@@ -6,11 +6,12 @@ import {
   ToolbarActions,
   ToolbarDescription,
   ToolbarHeading,
+  ToolbarPageTitle
 } from '@/partials/toolbar';
 
 import { SupervisionListContent } from '.';
 import { useLayout } from '@/providers';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const SupervisionListPage = () => {
   const { currentLayout } = useLayout();
@@ -22,12 +23,13 @@ const SupervisionListPage = () => {
         <Container>
           <Toolbar>
             <ToolbarHeading>
-            
-              <h1 className="text-success font-bold text-1.5xl">Supervisión</h1>
-                <ToolbarDescription>
-                  Administra y monitorea las supervisiones de farmacias
-                </ToolbarDescription>
+              {/* <ToolbarPageTitle /> */}
+              <h1 className="text-success font-bold text-1.5xl">Farmacias</h1>
+              <ToolbarDescription>
+                Permite visualizar, registrar y controlar los datos de las farmacias
+              </ToolbarDescription>
             </ToolbarHeading>
+            
           </Toolbar>
         </Container>
       )}

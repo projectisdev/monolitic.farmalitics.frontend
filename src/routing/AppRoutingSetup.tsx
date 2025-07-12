@@ -76,7 +76,7 @@ import {
 
 import { AuthPage } from '@/auth';
 import { RequireAuth } from '@/auth/RequireAuth';
-import { AppLayout } from '@/layouts/applayout';
+import { AppLayout, MinimalLayout } from '@/layouts/applayout';
 import { ErrorsRouting } from '@/errors';
 import { PharmacyListPage } from '@/pages/pharmacy/pharmacy-list';
 import {
@@ -85,19 +85,32 @@ import {
   AuthenticationGetStartedPage
 } from '@/pages/authentication';
 import { PharmacyFormPage } from '@/pages/pharmacy';
-import { SupervisionDetailPage, SupervisionListPage } from '@/pages/supervision/supervision-list';
 import { PharmacyDetailPage } from '@/pages/pharmacy/pharmacy-list/pharmacy-details';
-import { SupervisionFormPage } from '@/pages/supervision/Supervion-form/SupervisionFormPage';
 import { SanctionListPage } from '@/pages/sanctions';
 import { InspectionHistoryListPage } from '@/pages/inspection-history';
 import { LicenseRenewalPage } from '@/pages/license-renewal';
+import { useAuth } from '@/auth/useAuth';
+import { SupervisionFormPage } from '@/pages/supervision/supervision-form/SupervisionFormPage';
+import { SupervisionListPage } from '@/pages/supervision/supervision-list/SupervisionListPage';
+import { SupervisionDetailPage } from '@/pages/sanctions/supervision-list';
 
+const RequireNoAuth = ({ children }: { children: React.ReactElement }) => {
+  const { isAuthenticated } = useAuth();
+
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;  // <-- Aquí usas Navigate pero no está importado
+  }
+
+  return <MinimalLayout>{children}</MinimalLayout>;  // <-- Tampoco importaste MinimalLayout
+};
+
+export default RequireNoAuth;
 
 const AppRoutingSetup = (): ReactElement => {
   return (
-    <Routes>
+<Routes>
       <Route element={<RequireAuth />}>
-        <Route element={<AppLayout />}>
+           <Route element={<AppLayout />}>
           <Route path="/" element={<DefaultPage />} />
           <Route path="/dark-sidebar" element={<AppLayoutDarkSidebarPage />} />
           <Route path="/pharmacy/list" element={<PharmacyListPage />} />
@@ -107,7 +120,6 @@ const AppRoutingSetup = (): ReactElement => {
           <Route path="/pharmacy/list/pharmacy-detail/:id" element={<PharmacyDetailPage/>}/>
           <Route path="/supervision/list" element={<SupervisionListPage/>} />
           <Route path="/supervision/list/add-supervision" element={<SupervisionFormPage/>}/>
-          <Route path="/supervision/list/supervision-technical-form" element={<SupervisionFormPage/>}/>
           <Route path="/supervision/list/supervision-detail/:id" element={<SupervisionDetailPage/>}/>
           
           <Route path="/sanction/list" element={<SanctionListPage/>} />
@@ -209,8 +221,13 @@ const AppRoutingSetup = (): ReactElement => {
             element={<AuthenticationAccountDeactivatedPage />}
           />
           <Route path="/authentication/get-started" element={<AuthenticationGetStartedPage />} />
+            
         </Route>
-      </Route>
+      </Route >
+
+    <Route path="/supervision/list/add-supervision-external" element={<SupervisionFormPage />} />
+
+
       <Route path="error/*" element={<ErrorsRouting />} />
       <Route path="auth/*" element={<AuthPage />} />
       <Route path="*" element={<Navigate to="/error/404" />} />

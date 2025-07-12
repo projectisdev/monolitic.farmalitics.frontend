@@ -51,7 +51,7 @@ const SupervisionFormPage = () => {
   const selectedPharmacy = pharmacies.find(p => p.pharmacyId === formik.values.pharmacyId);
 
   return (
-    <form className="card pb-2.5 max-w-3xl mx-auto" onSubmit={formik.handleSubmit}>
+    <form className="card pb-2.5 max-w-screen-xl mx-auto" onSubmit={formik.handleSubmit}>
       <div className="card-header" id="basic_settings">
         <h3 className="card-title">Nueva Supervisión</h3>
       </div>
