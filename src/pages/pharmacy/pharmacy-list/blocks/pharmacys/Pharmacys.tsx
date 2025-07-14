@@ -319,7 +319,7 @@ const Pharmacys = () => {
       rowSelection
       onRowSelectionChange={handleRowSelection}
       pagination={{ size: 5 }}
-      sorting={[{ id: 'pharmacy', desc: false }]}
+      sorting={[{ id: 'createdAt', desc: true }]}
       toolbar={<Toolbar />}
       layout={{ card: true }}
     />

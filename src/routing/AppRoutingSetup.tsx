@@ -92,7 +92,8 @@ import { LicenseRenewalPage } from '@/pages/license-renewal';
 import { useAuth } from '@/auth/useAuth';
 import { SupervisionFormPage } from '@/pages/supervision/supervision-form/SupervisionFormPage';
 import { SupervisionListPage } from '@/pages/supervision/supervision-list/SupervisionListPage';
-import { SupervisionDetailPage } from '@/pages/sanctions/supervision-list';
+import { SupervisionDetailPage } from '@/pages/supervision/supervision-list';
+
 
 const RequireNoAuth = ({ children }: { children: React.ReactElement }) => {
   const { isAuthenticated } = useAuth();
@@ -120,6 +121,7 @@ const AppRoutingSetup = (): ReactElement => {
           <Route path="/pharmacy/list/pharmacy-detail/:id" element={<PharmacyDetailPage/>}/>
           <Route path="/supervision/list" element={<SupervisionListPage/>} />
           <Route path="/supervision/list/add-supervision" element={<SupervisionFormPage/>}/>
+          <Route path="/supervision/edit/:id" element={<SupervisionFormPage />} />
           <Route path="/supervision/list/supervision-detail/:id" element={<SupervisionDetailPage/>}/>
           
           <Route path="/sanction/list" element={<SanctionListPage/>} />

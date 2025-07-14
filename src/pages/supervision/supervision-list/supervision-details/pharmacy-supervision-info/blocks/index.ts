@@ -1,4 +1,4 @@
-export * from './GeneralData';
+export * from './GeneralDataSupervision';
 export * from './Locations';
 export * from './Network';
 export * from './OpenJobs';

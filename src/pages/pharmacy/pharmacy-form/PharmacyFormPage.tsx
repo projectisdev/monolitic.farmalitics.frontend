@@ -8,14 +8,11 @@ import { fetchCountries, fetchMunicipalities, fetchProvinces } from '@/service/l
 import { IPharmacy } from '../../../types/Pharmacy';
 import { KeenIcon } from '@/components';
 
-
-
-
 const pharmacySchema = Yup.object().shape({
   name: Yup.string().required('El nombre es obligatorio'),
   legal_identity: Yup.string()
-  .matches(/^[0-9]+$/, 'Solo se permiten números')
-  .required('El RNC o cédula es obligatorio'),
+    .matches(/^[0-9]+$/, 'Solo se permiten números')
+    .required('El RNC o cédula es obligatorio'),
   phone: Yup.string().required('El teléfono es obligatorio'),
   email: Yup.string().email('Correo inválido').required('El correo electrónico es obligatorio'),
   address: Yup.string().required('La dirección es obligatoria'),
@@ -28,7 +25,7 @@ const pharmacySchema = Yup.object().shape({
     .required('El número de empleados es obligatorio'),
   opening_date: Yup.date()
     .typeError('Debe ser una fecha válida')
-    .required('La fecha de apertura es obligatoria'),
+    .required('La fecha de apertura es obligatoria')
 });
 
 const PharmacyFormPage = () => {
@@ -37,7 +34,9 @@ const PharmacyFormPage = () => {
 
   const [countries, setCountries] = useState<{ country_id: number; name: string }[]>([]);
   const [provinces, setProvinces] = useState<{ province_id: number; name: string }[]>([]);
-  const [municipalities, setMunicipalities] = useState<{ municipality_id: number; name: string }[]>([]);
+  const [municipalities, setMunicipalities] = useState<{ municipality_id: number; name: string }[]>(
+    []
+  );
   const [loading, setLoading] = useState(false);
 
   const formik = useFormik<IPharmacy>({
@@ -55,7 +54,7 @@ const PharmacyFormPage = () => {
       pharmacy_type: '',
       number_of_employees: '',
       opening_date: '',
-      status: 'Activa',
+      status: 'Activa'
     },
     validationSchema: pharmacySchema,
     onSubmit: async (values, { setSubmitting }) => {
@@ -74,10 +73,10 @@ const PharmacyFormPage = () => {
             pharmacy_type: values.pharmacy_type,
             number_of_employees: values.number_of_employees,
             opening_date: values.opening_date,
-            status: values.status,
+            status: values.status
           });
           toast.success('Farmacia actualizada correctamente', {
-            icon: <KeenIcon icon="check-circle" className="text-green-500" />,
+            icon: <KeenIcon icon="check-circle" className="text-green-500" />
           });
         } else {
           await createPharmacy({
@@ -92,10 +91,10 @@ const PharmacyFormPage = () => {
             pharmacy_type: values.pharmacy_type ?? '',
             number_of_employees: values.number_of_employees ?? '',
             opening_date: values.opening_date ?? null,
-            status: 'Activa',
+            status: 'Activa'
           });
           toast.success('Farmacia creada correctamente', {
-            icon: <KeenIcon icon="check-circle" className="text-green-500" />,
+            icon: <KeenIcon icon="check-circle" className="text-green-500" />
           });
         }
         navigate('/pharmacy/list');
@@ -104,13 +103,11 @@ const PharmacyFormPage = () => {
       } finally {
         setSubmitting(false);
       }
-    },
+    }
   });
 
   useEffect(() => {
-    fetchCountries()
-      .then(setCountries)
-      .catch(console.error);
+    fetchCountries().then(setCountries).catch(console.error);
   }, []);
 
   useEffect(() => {
@@ -121,9 +118,7 @@ const PharmacyFormPage = () => {
       formik.setFieldValue('municipality_id', '');
       return;
     }
-    fetchProvinces(formik.values.country_id)
-      .then(setProvinces)
-      .catch(console.error);
+    fetchProvinces(formik.values.country_id).then(setProvinces).catch(console.error);
     setMunicipalities([]);
     formik.setFieldValue('province_id', '');
     formik.setFieldValue('municipality_id', '');
@@ -135,9 +130,7 @@ const PharmacyFormPage = () => {
       formik.setFieldValue('municipality_id', '');
       return;
     }
-    fetchMunicipalities(formik.values.province_id)
-      .then(setMunicipalities)
-      .catch(console.error);
+    fetchMunicipalities(formik.values.province_id).then(setMunicipalities).catch(console.error);
     formik.setFieldValue('municipality_id', '');
   }, [formik.values.province_id]);
 
@@ -159,7 +152,7 @@ const PharmacyFormPage = () => {
           pharmacy_type: data.pharmacy_type ?? '',
           number_of_employees: data.number_of_employees ?? '',
           opening_date: data.opening_date ? data.opening_date.split('T')[0] : '',
-          status: data.status ?? 'Activa',
+          status: data.status ?? 'Activa'
         });
       })
       .catch((err) => {
@@ -170,7 +163,12 @@ const PharmacyFormPage = () => {
       });
   }, [id]);
 
-  if (loading) return <div>Cargando datos...</div>;
+  if (loading)
+    return (
+      <div className="flex items-center justify-center min-h-[120px]">
+        <span className="animate-spin rounded-full h-8 w-8 border-4 border-success border-t-transparent"></span>
+      </div>
+    );
 
   return (
     <form className="card pb-2.5 max-w-3xl mx-auto" onSubmit={formik.handleSubmit} noValidate>
@@ -178,16 +176,17 @@ const PharmacyFormPage = () => {
         <h3 className="card-title">{id ? 'Editar Farmacia' : 'Añadir Farmacia'}</h3>
       </div>
       <div className="card-body grid gap-5">
-
         <div className="w-full flex gap-4">
           <div className="flex-1 flex flex-col gap-1.5">
-            <label htmlFor="name" className="form-label required">Nombre de Farmacia</label>
+            <label htmlFor="name" className="form-label required">
+              Nombre de Farmacia
+            </label>
             <input
               id="name"
               type="text"
               className="input"
               autoComplete="off"
-              placeholder='Escribir Nombre de Farmacia'
+              placeholder="Escribir Nombre de Farmacia"
               {...formik.getFieldProps('name')}
             />
             {formik.touched.name && formik.errors.name && (
@@ -196,13 +195,15 @@ const PharmacyFormPage = () => {
           </div>
 
           <div className="flex-1 flex flex-col gap-1.5">
-            <label htmlFor="legal_identity" className="form-label required">RNC | Cédula</label>
+            <label htmlFor="legal_identity" className="form-label required">
+              RNC | Cédula
+            </label>
             <input
               id="legal_identity"
               type="number"
               className="input"
               autoComplete="off"
-              placeholder='Escribir RNC o Cédula'
+              placeholder="Escribir RNC o Cédula"
               {...formik.getFieldProps('legal_identity')}
             />
             {formik.touched.legal_identity && formik.errors.legal_identity && (
@@ -213,15 +214,17 @@ const PharmacyFormPage = () => {
 
         <div className="w-full flex gap-4">
           <div className="flex-1 flex flex-col gap-1.5">
-            <label htmlFor="phone" className="form-label required">Teléfono</label>
+            <label htmlFor="phone" className="form-label required">
+              Teléfono
+            </label>
             <input
               id="phone"
               type="tel"
               className="input"
               autoComplete="off"
-              placeholder='Escribir Teléfono'
-              pattern="[0-9]{10}"  
-              maxLength={12}       
+              placeholder="Escribir Teléfono"
+              pattern="[0-9]{10}"
+              maxLength={12}
               {...formik.getFieldProps('phone')}
             />
             {formik.touched.phone && formik.errors.phone && (
@@ -230,13 +233,15 @@ const PharmacyFormPage = () => {
           </div>
 
           <div className="flex-1 flex flex-col gap-1.5">
-            <label htmlFor="email" className="form-label required">Correo Electrónico</label>
+            <label htmlFor="email" className="form-label required">
+              Correo Electrónico
+            </label>
             <input
               id="email"
               type="email"
               className="input"
               autoComplete="off"
-              placeholder='Escribir Correo Electrónico'
+              placeholder="Escribir Correo Electrónico"
               {...formik.getFieldProps('email')}
             />
             {formik.touched.email && formik.errors.email && (
@@ -246,61 +251,58 @@ const PharmacyFormPage = () => {
         </div>
 
         <div className="w-full flex gap-4">
-         {/* País */}
-<select
-  id="country_id"
-  className="select"
-  {...formik.getFieldProps('country_id')}
->
-  <option value="">Seleccione un país</option>
-  {countries.map(c => (
-    <option key={c.country_id} value={String(c.country_id)}>
-      {c.name}
-    </option>
-  ))}
-</select>
+          {/* País */}
+          <select id="country_id" className="select" {...formik.getFieldProps('country_id')}>
+            <option value="">Seleccione un país</option>
+            {countries.map((c) => (
+              <option key={c.country_id} value={String(c.country_id)}>
+                {c.name}
+              </option>
+            ))}
+          </select>
 
-{/* Provincia */}
-<select
-  id="province_id"
-  className="select"
-  {...formik.getFieldProps('province_id')}
-  disabled={!formik.values.country_id}
->
-  <option value="">Seleccione una provincia</option>
-  {provinces.map(p => (
-    <option key={p.province_id} value={String(p.province_id)}>
-      {p.name}
-    </option>
-  ))}
-</select>
+          {/* Provincia */}
+          <select
+            id="province_id"
+            className="select"
+            {...formik.getFieldProps('province_id')}
+            disabled={!formik.values.country_id}
+          >
+            <option value="">Seleccione una provincia</option>
+            {provinces.map((p) => (
+              <option key={p.province_id} value={String(p.province_id)}>
+                {p.name}
+              </option>
+            ))}
+          </select>
 
-{/* Municipio */}
-<select
-  id="municipality_id"
-  className="select"
-  {...formik.getFieldProps('municipality_id')}
-  disabled={!formik.values.province_id}
->
-  <option value="">Seleccione un municipio</option>
-  {municipalities.map(m => (
-    <option key={m.municipality_id} value={String(m.municipality_id)}>
-      {m.name}
-    </option>
-  ))}
-</select>
-
+          {/* Municipio */}
+          <select
+            id="municipality_id"
+            className="select"
+            {...formik.getFieldProps('municipality_id')}
+            disabled={!formik.values.province_id}
+          >
+            <option value="">Seleccione un municipio</option>
+            {municipalities.map((m) => (
+              <option key={m.municipality_id} value={String(m.municipality_id)}>
+                {m.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="w-full flex gap-4">
           <div className="flex-1 flex flex-col gap-1.5">
-            <label htmlFor="address" className="form-label required">Dirección</label>
+            <label htmlFor="address" className="form-label required">
+              Dirección
+            </label>
             <input
               id="address"
               type="text"
               className="input"
               autoComplete="off"
-              placeholder='Escribir Dirección'
+              placeholder="Escribir Dirección"
               {...formik.getFieldProps('address')}
             />
             {formik.touched.address && formik.errors.address && (
@@ -309,7 +311,9 @@ const PharmacyFormPage = () => {
           </div>
 
           <div className="flex-1 flex flex-col gap-1.5">
-            <label htmlFor="pharmacy_type" className="form-label required">Tipo de farmacia</label>
+            <label htmlFor="pharmacy_type" className="form-label required">
+              Tipo de farmacia
+            </label>
             <select
               id="pharmacy_type"
               className="select"
@@ -327,7 +331,9 @@ const PharmacyFormPage = () => {
 
         <div className="w-full flex gap-4">
           <div className="flex-1 flex flex-col gap-1.5">
-            <label htmlFor="number_of_employees" className="form-label required">Número de empleados</label>
+            <label htmlFor="number_of_employees" className="form-label required">
+              Número de empleados
+            </label>
             <input
               id="number_of_employees"
               type="number"
@@ -341,7 +347,9 @@ const PharmacyFormPage = () => {
           </div>
 
           <div className="flex-1 flex flex-col gap-1.5">
-            <label htmlFor="opening_date" className="form-label required">Fecha de Apertura</label>
+            <label htmlFor="opening_date" className="form-label required">
+              Fecha de Apertura
+            </label>
             <input
               id="opening_date"
               type="date"
@@ -354,12 +362,10 @@ const PharmacyFormPage = () => {
           </div>
 
           <div className="flex-1 flex flex-col gap-1.5">
-            <label htmlFor="status" className="form-label required">Estado</label>
-            <select
-              id="status"
-              className="select"
-              {...formik.getFieldProps('status')}
-            >
+            <label htmlFor="status" className="form-label required">
+              Estado
+            </label>
+            <select id="status" className="select" {...formik.getFieldProps('status')}>
               <option value="Activa">Activa</option>
               <option value="Inactiva">Inactiva</option>
             </select>
@@ -383,7 +389,13 @@ const PharmacyFormPage = () => {
             className="btn btn-sm btn-greenA text-white"
             disabled={!formik.isValid || !formik.dirty || formik.isSubmitting}
           >
-            {formik.isSubmitting ? (id ? 'Guardando...' : 'Guardando...') : (id ? 'Actualizar Farmacia' : 'Añadir Farmacia')}
+            {formik.isSubmitting
+              ? id
+                ? 'Guardando...'
+                : 'Guardando...'
+              : id
+                ? 'Actualizar Farmacia'
+                : 'Añadir Farmacia'}
           </button>
         </div>
       </div>

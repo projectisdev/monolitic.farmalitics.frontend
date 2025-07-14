@@ -11,9 +11,9 @@ import {
 
 import { useLayout } from '@/providers';
 import { Link, useNavigate } from 'react-router-dom';
-import { PharmacyDetailContent } from './PharmacyDetailContent';
+import { SupervisionDetailContent } from './SupervisionDetailContent';
 
-const PharmacyDetailPage = () => {
+const SupervisionDetailPage = () => {
   const { currentLayout } = useLayout();
   const navigate = useNavigate();
 
@@ -38,10 +38,10 @@ const PharmacyDetailPage = () => {
         
       )}
       <Container>
-        <PharmacyDetailContent />
+        <SupervisionDetailContent />
       </Container>
     </Fragment>
   );
 };
 
-export { PharmacyDetailPage };
+export { SupervisionDetailPage };

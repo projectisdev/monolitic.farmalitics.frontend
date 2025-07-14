@@ -24,10 +24,10 @@ const SupervisionListPage = () => {
           <Toolbar>
             <ToolbarHeading>
               {/* <ToolbarPageTitle /> */}
-              <h1 className="text-success font-bold text-1.5xl">Farmacias</h1>
-              <ToolbarDescription>
-                Permite visualizar, registrar y controlar los datos de las farmacias
-              </ToolbarDescription>
+              <h1 className="text-success font-bold text-1.5xl">Solicitudes de Supervisión</h1>
+                <ToolbarDescription>
+                  Gestión de solicitudes de Supervisión a Farmacias
+                </ToolbarDescription>
             </ToolbarHeading>
             
           </Toolbar>

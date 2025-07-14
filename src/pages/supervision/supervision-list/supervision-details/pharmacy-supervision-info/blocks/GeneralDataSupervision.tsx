@@ -2,29 +2,39 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { KeenIcon } from "@/components";
 import { IGeneralData } from "@/types/Pharmacy";
+import { ISupervision } from "@/types/Supervision";
 import { getPharmacyById } from "@/service/pharmacyService";
+import { getSupervisionPharmacyById } from "@/service/supervisionPharmacyService";
 
-const GeneralData = () => {
+const GeneralDataSupervision = () => {
   const { id } = useParams<{ id: string }>();
   const [pharmacy, setPharmacy] = useState<IGeneralData | null>(null);
 
   useEffect(() => {
-    const fetchPharmacy = async () => {
+    const fetchData = async () => {
       try {
-        if (id) {
-          const found = await getPharmacyById(id);
-          setPharmacy(found);
-        }
+        if (!id) return;
+
+        // 1. Obtener supervisión por ID
+        const supervision: ISupervision = await getSupervisionPharmacyById(id);
+
+        // 2. Con el pharmacy_id de la supervisión, buscar la farmacia
+        const foundPharmacy = await getPharmacyById(supervision.pharmacy_id);
+
+        // 3. Guardar la farmacia en estado
+        setPharmacy(foundPharmacy);
       } catch (error) {
+        console.error("Error al obtener datos:", error);
         setPharmacy(null);
       }
     };
-    fetchPharmacy();
+
+    fetchData();
   }, [id]);
 
-  if (!pharmacy) {
-    return <div>Cargando datos...</div>;
-  }
+  if (!pharmacy) return <div className="flex items-center justify-center min-h-[120px]">
+      <span className="animate-spin rounded-full h-8 w-8 border-4 border-success border-t-transparent"></span>
+    </div>;
 
   return (
     <div className="card">
@@ -38,12 +48,14 @@ const GeneralData = () => {
             <strong className="text-gray-800">RNC | Cédula:</strong>
             {pharmacy.legal_identity}
           </span>
+
           {pharmacy.phone && (
             <span className="text-gray-700 mb-1 flex items-center gap-2">
               <KeenIcon icon="phone" className="text-success" />
               <strong className="text-gray-800">Teléfono:</strong> {pharmacy.phone}
             </span>
           )}
+
           {pharmacy.email && (
             <span className="text-success mb-1 flex items-center gap-2">
               <KeenIcon icon="sms" className="text-success" />
@@ -51,13 +63,12 @@ const GeneralData = () => {
               <a
                 href={`mailto:${pharmacy.email}`}
                 className="text-success font-semibold"
-                style={{ cursor: "pointer" }}
-                title={pharmacy.email}
               >
                 {pharmacy.email}
               </a>
             </span>
           )}
+
           <span className="text-gray-700 mb-1 flex items-center gap-2">
             <KeenIcon icon="check-circle" className="text-success" />
             <strong className="text-gray-800">Estado:</strong>{" "}
@@ -67,21 +78,23 @@ const GeneralData = () => {
                   ? "badge-success badge-outline"
                   : "badge-danger badge-outline"
               }`}
-              style={{ whiteSpace: "normal", wordBreak: "break-word" }}
             >
               {pharmacy.status}
             </span>
           </span>
+
           <span className="text-gray-700 mb-1 flex items-center gap-2">
             <KeenIcon icon="questionnaire-tablet" className="text-success" />
             <strong className="text-gray-800">Tipo de Farmacia:</strong> {pharmacy.pharmacy_type}
           </span>
+
           {pharmacy.number_of_employees && (
             <span className="text-gray-700 mb-1 flex items-center gap-2">
               <KeenIcon icon="users" className="text-success" />
               <strong className="text-gray-800">Empleados:</strong> {pharmacy.number_of_employees}
             </span>
           )}
+
           {pharmacy.opening_date && (
             <span className="text-gray-700 mb-1 flex items-center gap-2">
               <KeenIcon icon="calendar-tick" className="text-success" />
@@ -95,4 +108,4 @@ const GeneralData = () => {
   );
 };
 
-export { GeneralData };
+export { GeneralDataSupervision };

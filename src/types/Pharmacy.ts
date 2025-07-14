@@ -14,6 +14,8 @@ export interface IPharmacy {
   status: string;
   created_at?: string;
   updated_at?: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 export interface IGeneralData {
@@ -26,4 +28,11 @@ export interface IGeneralData {
   pharmacy_type: string;
   number_of_employees?: string;
   opening_date?: string;
+}
+
+export interface ILocationProfile {
+  country_id?: string;
+  province_id?: string;
+  municipality_id?: string;
+  address?: string;
 }

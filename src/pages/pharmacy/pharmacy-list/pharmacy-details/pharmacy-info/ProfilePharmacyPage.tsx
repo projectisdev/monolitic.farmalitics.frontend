@@ -31,7 +31,9 @@ const ProfilePharmacyPage = () => {
   }, [id]);
 
   if (!pharmacy) {
-    return <div>Cargando datos...</div>;
+    return <div className="flex items-center justify-center min-h-[120px]">
+      <span className="animate-spin rounded-full h-8 w-8 border-4 border-success border-t-transparent"></span>
+    </div>;
   }
 
   const image = (

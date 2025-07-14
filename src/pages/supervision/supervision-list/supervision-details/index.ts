@@ -1,3 +1,3 @@
-export * from './PharmacyDetailPage';
-export * from './PharmacyDetailContent';
-export * from './pharmacy-info';
+export * from './SupervisionDetailPage';
+export * from './SupervisionDetailContent';
+export * from './pharmacy-supervision-info';

@@ -18,7 +18,7 @@ interface IProfileProduct {
 }
 interface IProfileProducts extends Array<IProfileProduct> {}
 
-const CompanyProfile = () => {
+const LocationProfile = () => {
 
   const rows: ILocationRow[] = [
     {
@@ -111,7 +111,7 @@ const CompanyProfile = () => {
 };
 
 export {
-  CompanyProfile,
+  LocationProfile,
   type ILocationRow,
   type ILocationRows,
   type IProfileProduct,

@@ -110,4 +110,11 @@ export const updatePharmacyStatus = async (pharmacyId: string, status: 'Activa' 
   return await response.json();
 };
 
+export async function fetchActivePharmacies() {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const res = await fetch(`${apiUrl}/pharmacies/active/all`); // <-- cambio aquí
+  if (!res.ok) throw new Error('Error al cargar farmacias activas');
+  return res.json();
+}
+
 

@@ -1,119 +1,142 @@
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-
+import { useEffect, useState } from 'react';
 import { KeenIcon } from '@/components';
+import { fetchCountries, fetchProvinces, fetchMunicipalities } from '@/service/locationService';
 
-interface ILocationRow {
-  country: string;
-  province: string;
-  municipe: string;
-  sectorDirection: string;
+interface ICountry {
+  id: string;
+  name: string;
 }
 
-interface ILocationRows extends Array<ILocationRow> {}
-
-interface IProfileProduct {
-  label: string;
+interface IProvince {
+  id: string;
+  name: string;
 }
-interface IProfileProducts extends Array<IProfileProduct> {}
 
-const CompanyProfile = () => {
+interface IMunicipality {
+  id: string;
+  name: string;
+}
 
-  const rows: ILocationRow[] = [
-    {
-      country: 'República Dominicana',
-      province: 'Santo Domingo',
-      municipe: 'Pedro Brand',
-      sectorDirection: 'Mi Vivienda, Hato Nuevo'
+const LocationProfile = () => {
+  const [countries, setCountries] = useState<ICountry[]>([]);
+  const [provinces, setProvinces] = useState<IProvince[]>([]);
+  const [municipalities, setMunicipalities] = useState<IMunicipality[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Paso 1: cargar países
+  useEffect(() => {
+    const loadCountries = async () => {
+      try {
+        const countriesData = await fetchCountries();
+        setCountries(countriesData.slice(0, 3));
+      } catch {
+        setCountries([]);
+      }
+    };
+    loadCountries();
+  }, []);
+
+  // Paso 2: cargar provincias cuando countries cambie y tenga datos
+  useEffect(() => {
+    if (countries.length === 0) {
+      setProvinces([]);
+      return;
     }
-  ];
 
-  const renderRows = (row: ILocationRow, index: number) => {
+    const loadProvinces = async () => {
+      try {
+        const provincesData = await fetchProvinces(countries[0].id);
+        setProvinces(provincesData.slice(0, 3));
+      } catch {
+        setProvinces([]);
+      }
+    };
+    loadProvinces();
+  }, [countries]);
+
+  // Paso 3: cargar municipios cuando provinces cambie y tenga datos
+  useEffect(() => {
+    if (provinces.length === 0) {
+      setMunicipalities([]);
+      return;
+    }
+
+    const loadMunicipalities = async () => {
+      try {
+        const municipalitiesData = await fetchMunicipalities(provinces[0].id);
+        setMunicipalities(municipalitiesData.slice(0, 3));
+      } catch {
+        setMunicipalities([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadMunicipalities();
+  }, [provinces]);
+
+  if (loading) {
     return (
-      <div key={index} className="flex flex-col gap-6">
-        <span className='text-success'>
-           <KeenIcon icon="flag
-" className="text-success me-1"/>
-          <strong className='text-gray-800'>País:</strong> {row.country}
-        </span>
-        <span className='text-success'>
-           <KeenIcon icon="map" className="text-success me-1"/>
-          <strong className='text-gray-800'>Provincia:</strong> {row.province}
-        </span>
-        <span className='text-success'>
-           <KeenIcon icon="route" className="text-success me-1"/>
-          <strong className='text-gray-800'>Municipio:</strong> {row.municipe}
-        </span>
-        <span className="text-success break-words max-w-xs">
-          <KeenIcon icon="geolocation
-" className="text-success me-1"/>
-          <strong className="text-gray-800">Sector/Dirección:</strong> {row.sectorDirection}
-        </span>
+      <div className="flex items-center justify-center min-h-[120px]">
+        <span className="animate-spin rounded-full h-8 w-8 border-4 border-success border-t-transparent"></span>
       </div>
     );
-  };
-
-  const renderProducts = (product: IProfileProduct, index: number) => {
-    return (
-      <span key={index} className="badge badge-outline">
-        {product.label}
-      </span>
-    );
-  };
-
-  const customIcon = L.divIcon({
-    html: `<i class="ki-solid ki-geolocation text-3xl text-success"></i>`,
-    className: 'leaflet-marker',
-    bgPos: [10, 10],
-    iconAnchor: [20, 37],
-    popupAnchor: [0, -37]
-  });
+  }
 
   return (
     <div className="card">
       <div className="card-header">
-        <h3 className="card-title">Ubicación</h3>
+        <h3 className="card-title">Resumen de Ubicaciones</h3>
       </div>
-      <div className="card-body">
+      <div className="card-body pt-3.5 pb-3.5">
+        <div className="flex flex-col gap-4">
+          <div>
+            <strong className="text-gray-800 flex items-center gap-2 mb-1">
+              <KeenIcon icon="globe" className="text-success" /> Países (3 primeros)
+            </strong>
+            {countries.length > 0 ? (
+              <ul className="list-disc list-inside text-gray-700">
+                {countries.map((country) => (
+                  <li key={country.id}>{country.name}</li>
+                ))}
+              </ul>
+            ) : (
+              <span className="text-gray-500">No hay países disponibles</span>
+            )}
+          </div>
 
-        <div className="flex flex-wrap items-center gap-10 mb-10">
-          <div className="flex flex-col gap-10">
-            {rows.map(renderRows)}
+          <div>
+            <strong className="text-gray-800 flex items-center gap-2 mb-1">
+              <KeenIcon icon="map-marker" className="text-success" /> Provincias (3 primeras)
+            </strong>
+            {provinces.length > 0 ? (
+              <ul className="list-disc list-inside text-gray-700">
+                {provinces.map((province) => (
+                  <li key={province.id}>{province.name}</li>
+                ))}
+              </ul>
+            ) : (
+              <span className="text-gray-500">No hay provincias disponibles</span>
+            )}
           </div>
-            <MapContainer
-              center={[19.0, -70.0]} // Centro aproximado de República Dominicana
-              zoom={7}
-              className="rounded-xl w-full md:w-80 min-h-52"
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <Marker position={[18.4861, -69.9312]} icon={customIcon}>
-                <Popup>República Dominicana</Popup>
-              </Marker>
-            </MapContainer>
+
+          <div>
+            <strong className="text-gray-800 flex items-center gap-2 mb-1">
+              <KeenIcon icon="city" className="text-success" /> Municipios (3 primeros)
+            </strong>
+            {municipalities.length > 0 ? (
+              <ul className="list-disc list-inside text-gray-700">
+                {municipalities.map((municipality) => (
+                  <li key={municipality.id}>{municipality.name}</li>
+                ))}
+              </ul>
+            ) : (
+              <span className="text-gray-500">No hay municipios disponibles</span>
+            )}
+          </div>
         </div>
-        
-        {/* //TODO: Eliminar esta parte / Ver si se puede reutilizar */}
-        {/* <div className="flex flex-col gap-4 mb-2.5">
-          <div className="text-md font-semibold text-gray-900">Products</div>
-          <div className="flex flex-wrap gap-2.5">
-            {products.map((product, index) => {
-              return renderProducts(product, index);
-            })}
-          </div>
-        </div> */}
       </div>
     </div>
   );
 };
 
-export {
-  CompanyProfile,
-  type ILocationRow,
-  type ILocationRows,
-  type IProfileProduct,
-  type IProfileProducts
-};
+export { LocationProfile };

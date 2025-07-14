@@ -1,1 +1,1 @@
-export * from './Supervision';
+export * from './supervision-table';

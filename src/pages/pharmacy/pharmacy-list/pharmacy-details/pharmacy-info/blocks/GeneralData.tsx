@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { KeenIcon } from "@/components";
-import { IGeneralData } from "@/types/Pharmacy";
-import { getPharmacyById } from "@/service/pharmacyService";
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { KeenIcon } from '@/components';
+import { IGeneralData } from '@/types/Pharmacy';
+import { getPharmacyById } from '@/service/pharmacyService';
 
 const GeneralData = () => {
   const { id } = useParams<{ id: string }>();
@@ -23,7 +23,11 @@ const GeneralData = () => {
   }, [id]);
 
   if (!pharmacy) {
-    return <div>Cargando datos...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-[120px]">
+        <span className="animate-spin rounded-full h-8 w-8 border-4 border-success border-t-transparent"></span>
+      </div>
+    );
   }
 
   return (
@@ -47,11 +51,11 @@ const GeneralData = () => {
           {pharmacy.email && (
             <span className="text-success mb-1 flex items-center gap-2">
               <KeenIcon icon="sms" className="text-success" />
-              <strong className="text-gray-800">Email:</strong>{" "}
+              <strong className="text-gray-800">Email:</strong>{' '}
               <a
                 href={`mailto:${pharmacy.email}`}
                 className="text-success font-semibold"
-                style={{ cursor: "pointer" }}
+                style={{ cursor: 'pointer' }}
                 title={pharmacy.email}
               >
                 {pharmacy.email}
@@ -60,14 +64,14 @@ const GeneralData = () => {
           )}
           <span className="text-gray-700 mb-1 flex items-center gap-2">
             <KeenIcon icon="check-circle" className="text-success" />
-            <strong className="text-gray-800">Estado:</strong>{" "}
+            <strong className="text-gray-800">Estado:</strong>{' '}
             <span
               className={`badge badge-sm ${
-                pharmacy.status === "Activa"
-                  ? "badge-success badge-outline"
-                  : "badge-danger badge-outline"
+                pharmacy.status === 'Activa'
+                  ? 'badge-success badge-outline'
+                  : 'badge-danger badge-outline'
               }`}
-              style={{ whiteSpace: "normal", wordBreak: "break-word" }}
+              style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}
             >
               {pharmacy.status}
             </span>
@@ -85,7 +89,7 @@ const GeneralData = () => {
           {pharmacy.opening_date && (
             <span className="text-gray-700 mb-1 flex items-center gap-2">
               <KeenIcon icon="calendar-tick" className="text-success" />
-              <strong className="text-gray-800">Fecha de apertura:</strong>{" "}
+              <strong className="text-gray-800">Fecha de apertura:</strong>{' '}
               {new Date(pharmacy.opening_date).toLocaleDateString()}
             </span>
           )}

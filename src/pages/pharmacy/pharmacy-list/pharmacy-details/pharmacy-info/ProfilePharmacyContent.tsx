@@ -1,14 +1,6 @@
 // import { Connections, Contributions, Projects, Tags } from '../default';
-import {
-  Statistics,
-  GeneralData,
-  OpenJobs,
-  Network,
-  CompanyProfile,
-  Locations,
-  IStatisticsItems,
-  INetworkItems
-} from './blocks';
+import { GeneralData } from './blocks';
+import { LocationProfile } from './blocks/LocationProfile';
 
 const ProfilePharmacyContent = () => {
   return (
@@ -29,7 +21,7 @@ const ProfilePharmacyContent = () => {
       </div>
       <div className="col-span-1 lg:col-span-2">
         <div className="flex flex-col gap-5 lg:gap-7.5">
-          <CompanyProfile />
+          <LocationProfile />
           {/* <OpenJobs /> */}
 
           {/* <Locations /> */}
@@ -37,9 +29,6 @@ const ProfilePharmacyContent = () => {
           {/* <Projects /> */}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
-            {/* <Connections title="Members" /> */}
-
-            {/* <Contributions title="Investments" /> */}
           </div>
         </div>
       </div>
