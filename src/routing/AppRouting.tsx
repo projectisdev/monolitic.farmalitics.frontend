@@ -15,27 +15,27 @@ const AppRouting = (): ReactElement => {
 
   useEffect(() => {
     if (firstLoad) {
-      verify().finally(() => {
-        setLoading(false);
-        setFirstLoad(false);
-      });
+      // verify().finally(() => {
+      //   setLoading(false);
+      //   setFirstLoad(false);
+      // });
     }
   });
 
   useEffect(() => {
     if (!firstLoad) {
       setProgressBarLoader(true);
-      verify()
-        .catch(() => {
-          throw new Error('User verify request failed!');
-        })
-        .finally(() => {
-          setPreviousLocation(path);
-          setProgressBarLoader(false);
-          if (path === previousLocation) {
-            setPreviousLocation('');
-          }
-        });
+      // verify()
+      //   .catch(() => {
+      //     throw new Error('User verify request failed!');
+      //   })
+      //   .finally(() => {
+      //     setPreviousLocation(path);
+      //     setProgressBarLoader(false);
+      //     if (path === previousLocation) {
+      //       setPreviousLocation('');
+      //     }
+      //   });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);

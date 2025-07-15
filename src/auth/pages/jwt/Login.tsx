@@ -1,6 +1,6 @@
 import { type MouseEvent, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import clsx from 'clsx';
+import clsx from 'clsx';  
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { KeenIcon } from '@/components';
@@ -8,6 +8,18 @@ import { toAbsoluteUrl } from '@/utils';
 import { useAuthContext } from '@/auth';
 import { useLayout } from '@/providers';
 import { Alert } from '@/components';
+import axios from 'axios';
+
+interface LoginValues {
+  email: string;
+  password: string;
+  remember: boolean;
+}
+
+interface FormikHelpers {
+  setStatus: (status: string) => void;
+  setSubmitting: (isSubmitting: boolean) => void;
+}
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
@@ -16,53 +28,58 @@ const loginSchema = Yup.object().shape({
     .max(50, 'Máximo 50 caracteres')
     .required('El correo es obligatorio'),
   password: Yup.string()
-    .min(3, 'Mínimo 3 caracteres')
+    .min(8, 'Mínimo 8 caracteres')
     .max(50, 'Máximo 50 caracteres')
     .required('La contraseña es obligatoria'),
-  remember: Yup.boolean()
+  remember: Yup.boolean() 
 });
 
-const initialValues = {
-  email: 'demo@keenthemes.com',
-  password: 'demo1234',
+const initialValues: LoginValues = {
+  email: 'felsi.pe@pharmacy.com',
+  password: 'Intec125@',
   remember: false
 };
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
-  const { login } = useAuthContext();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
   const [showPassword, setShowPassword] = useState(false);
   const { currentLayout } = useLayout();
+  const { login } = useAuthContext();
 
-  const formik = useFormik({
-    initialValues,
-    validationSchema: loginSchema,
-    onSubmit: async (values, { setStatus, setSubmitting }) => {
-      setLoading(true);
+  const onSubmit = async (values: LoginValues, { setStatus, setSubmitting }: FormikHelpers) => {
+    setLoading(true);
+    try {
+      // const response = await axios.post<{ access_token: string }>('http://localhost:3000/api/auth/login', {
+      //   email: values.email,
+      //   password: values.password
+      // });
 
-      try {
-        if (!login) {
-          throw new Error('JWTProvider is required for this form.');
-        }
-
-        await login(values.email, values.password);
-
-        if (values.remember) {
+      // Guardar el token en localStorage
+      await login(values.email, values.password);
+      // localStorage.setItem('token', response.data.access_token);
+          if (values.remember) {
           localStorage.setItem('email', values.email);
         } else {
           localStorage.removeItem('email');
         }
 
-        navigate(from, { replace: true });
-      } catch {
+      // Redirigir al usuario
+      navigate(from, { replace: true });
+    } catch (error) {
         setStatus('The login details are incorrect');
         setSubmitting(false);
-      }
+    } finally {
       setLoading(false);
     }
+  };
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema: loginSchema,
+    onSubmit
   });
 
   const togglePassword = (event: MouseEvent<HTMLButtonElement>) => {

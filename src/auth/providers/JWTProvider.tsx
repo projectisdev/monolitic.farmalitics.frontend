@@ -13,7 +13,7 @@ import * as authHelper from '../_helpers';
 import { type AuthModel, type UserModel } from '@/auth';
 
 const API_URL = import.meta.env.VITE_APP_API_URL;
-export const LOGIN_URL = `${API_URL}/login`;
+export const LOGIN_URL = `${API_URL}auth/login`;
 export const REGISTER_URL = `${API_URL}/register`;
 export const FORGOT_PASSWORD_URL = `${API_URL}/forgot-password`;
 export const RESET_PASSWORD_URL = `${API_URL}/reset-password`;
@@ -78,8 +78,10 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
         password
       });
       saveAuth(auth);
-      const { data: user } = await getUser();
-      setCurrentUser(user);
+      // const { data: user } = await getUser();
+            console.log('register', auth);
+      console.log('registerasdjfksdkfjhsdfkjsdfjksdfjnsdfjknsdfjksdnkjdsjkfnsdkjfnsdjkfndsjk');
+      setCurrentUser({id:0, username:auth.user.first_name, password: undefined, email: auth.user.email, first_name: auth.user.first_name, last_name: auth.user.last_name});
     } catch (error) {
       saveAuth(undefined);
       throw new Error(`Error ${error}`);
@@ -94,8 +96,17 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
         password_confirmation
       });
       saveAuth(auth);
-      const { data: user } = await getUser();
-      setCurrentUser(user);
+      /**
+       *   id: number;
+  username: string;
+  password: string | undefined;
+  email: string;
+  first_name: string;
+  last_name: string;
+       */
+      console.log('register', auth);
+      console.log('registerasdjfksdkfjhsdfkjsdfjksdfjnsdfjknsdfjksdnkjdsjkfnsdkjfnsdjkfndsjk');
+      // setCurrentUser({});
     } catch (error) {
       saveAuth(undefined);
       throw new Error(`Error ${error}`);
