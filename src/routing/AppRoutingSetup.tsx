@@ -93,6 +93,10 @@ import { useAuth } from '@/auth/useAuth';
 import { SupervisionFormPage } from '@/pages/supervision/supervision-form/SupervisionFormPage';
 import { SupervisionListPage } from '@/pages/supervision/supervision-list/SupervisionListPage';
 import { SupervisionDetailPage } from '@/pages/supervision/supervision-list';
+import InspectionFormPage from '@/pages/supervision/supervision-list/supervision-details/pharmacy-supervision-info/blocks/inspection-form/InspectionFormPage';
+import { MedicineTypeListPage } from '@/pages/supervision/medicine-type/MedicineTypeListPage';
+
+
 
 
 const RequireNoAuth = ({ children }: { children: React.ReactElement }) => {
@@ -127,6 +131,10 @@ const AppRoutingSetup = (): ReactElement => {
           <Route path="/sanction/list" element={<SanctionListPage/>} />
           <Route path="/inspection-history/list" element={<InspectionHistoryListPage/>} />
           <Route path="/license-renewal/list" element={<LicenseRenewalPage/>} />
+        
+          <Route path="/supervision/add-inspection" element={<InspectionFormPage/>}/>
+
+          <Route path="/medicine-type/list" element={<MedicineTypeListPage/>}/>
           {/* Otras Rutas */}
           <Route path="/public-profile/profiles/default" element={<ProfileDefaultPage />} />
           <Route path="/public-profile/profiles/creator" element={<ProfileCreatorPage />} />

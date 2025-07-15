@@ -33,12 +33,17 @@ const SupervisionDetailPage = () => {
             </ToolbarHeading>
             
           </Toolbar>
+           
         </Container>
 
         
       )}
       <Container>
+      <div className="mb-4">
+       
+</div>
         <SupervisionDetailContent />
+         
       </Container>
     </Fragment>
   );

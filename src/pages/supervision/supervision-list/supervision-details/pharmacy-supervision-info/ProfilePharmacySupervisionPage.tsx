@@ -59,10 +59,12 @@ const ProfilePharmacySupervisionPage = () => {
     <Fragment>
       <UserProfileHero name={pharmacy?.name || ''} image={image} />
 
-      <Container>{/* Aquí puedes agregar más contenido si es necesario */}</Container>
+
 
       <Container>
         <ProfilePharmacySupervisionContent />
+
+        
       </Container>
     </Fragment>
   );

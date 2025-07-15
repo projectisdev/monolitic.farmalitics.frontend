@@ -46,6 +46,11 @@ export const MENU_SIDEBAR: TMenuConfig = [
         title: 'Agendar Supervisión',
         path: '/supervision/list/add-supervision'
       }
+      ,
+      {
+        title: 'Tipos de Medicina',
+        path: '/medicine-type/list'
+      }
     ]
   },
   {

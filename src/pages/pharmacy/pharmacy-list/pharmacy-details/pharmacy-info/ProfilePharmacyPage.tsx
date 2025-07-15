@@ -54,7 +54,6 @@ const ProfilePharmacyPage = () => {
       />
 
       <Container>
-        {/* Aquí puedes agregar más contenido si es necesario */}
       </Container>
 
       <Container>

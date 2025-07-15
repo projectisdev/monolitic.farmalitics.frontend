@@ -15,13 +15,10 @@ const GeneralDataSupervision = () => {
       try {
         if (!id) return;
 
-        // 1. Obtener supervisión por ID
         const supervision: ISupervision = await getSupervisionPharmacyById(id);
 
-        // 2. Con el pharmacy_id de la supervisión, buscar la farmacia
         const foundPharmacy = await getPharmacyById(supervision.pharmacy_id);
 
-        // 3. Guardar la farmacia en estado
         setPharmacy(foundPharmacy);
       } catch (error) {
         console.error("Error al obtener datos:", error);

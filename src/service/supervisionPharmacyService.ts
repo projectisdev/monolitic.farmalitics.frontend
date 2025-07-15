@@ -33,7 +33,7 @@ export const createSupervisionPharmacy = async (supervision: {
     throw new Error(`Error al crear la supervisión: ${errorText}`);
   }
 
-  return await response.json(); // contiene supervision_id y message
+  return await response.json();
 };
 
 // Eliminar Supervision
@@ -73,7 +73,7 @@ export const updateSupervisionPharmacyById = async (
     throw new Error(`Error al actualizar la supervisión: ${errorText}`);
   }
 
-  return await response.json(); // contiene message u otros datos
+  return await response.json(); 
 };
 
 
